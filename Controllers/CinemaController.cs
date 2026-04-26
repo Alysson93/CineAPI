@@ -1,7 +1,7 @@
 using CineAPI.Database;
 using CineAPI.DTOs;
-using CineAPI.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace CineAPI.Controllers;
 
@@ -22,15 +22,23 @@ public class CinemaController(CineDbContext context) : ControllerBase
     [HttpGet]
     public IActionResult ListarCinemas([FromQuery] int skip = 0, [FromQuery] int take = 25)
     {
-        return Ok(_context.Cinemas.Skip(skip).Take(take));
+        return Ok(
+            _context.Cinemas
+            .AsNoTracking()
+            .Include(x => x.Endereco)
+            .Skip(skip).Take(take)
+            .Select(x => new CinemaResponseDTO(x.Id, x.Nome, x.Endereco))
+        );
     }
 
     [HttpGet("{id:int}")]
     public IActionResult ExibirCinemaPorId([FromRoute] int id)
     {
-        var cinema = _context.Cinemas.FirstOrDefault(x => x.Id == id);
+        var cinema = _context.Cinemas
+            .Include(x => x.Endereco)
+            .FirstOrDefault(x => x.Id == id);
         if (cinema is null) return NotFound();
-        return Ok(cinema);
+        return Ok(new CinemaResponseDTO(cinema.Id, cinema.Nome, cinema.Endereco));
     }
 
     [HttpPut("{id:int}")]

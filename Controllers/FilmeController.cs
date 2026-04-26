@@ -1,7 +1,7 @@
 using CineAPI.Database;
 using CineAPI.DTOs;
-using CineAPI.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace CineAPI.Controllers;
 

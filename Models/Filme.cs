@@ -17,6 +17,8 @@ public class Filme
     [Required] [Range(20, 240)]
     public int Duracao { get; set; }
 
+    public virtual ICollection<Sessao>? Sessoes { get; set; }
+
     public void SetValues(FilmeRequestDTO dto)
     {
         Titulo = dto.Titulo;

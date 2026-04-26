@@ -22,4 +22,9 @@ public class Endereco
         Numero = dto.Numero;
     }
 
+    public static implicit operator EnderecoResponseDTO(Endereco endereco)
+    {
+        return new EnderecoResponseDTO(endereco.Id, endereco.Logradouro, endereco.Numero);
+    }
+
 }
